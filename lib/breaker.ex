@@ -1,10 +1,10 @@
 defmodule Breaker do
   @moduledoc """
-  A circuit-breaker wrapped around `HTTPotion` to make requests to external
+  A circuit-breaker wrapped around `HTTPoison` to make requests to external
   resources and help your application gracefully fail.
 
   Defines a function for each HTTP method (ie `Breaker.get()`) that returns a
-  Task that will execute the HTTP request (using `HTTPotion`) and record the
+  Task that will execute the HTTP request (using `HTTPoison`) and record the
   response in the circuit breaker.
   """
 
@@ -52,9 +52,9 @@ defmodule Breaker do
   * `url`: The base url to use for the breaker. This is ideally a single
     external resource, complete with protocal, domain name, port, and an
     optional subpath. Required.
-  * `headers`: A keyword list of headers, passed to `HTTPotion`.
+  * `headers`: A keyword list of headers, passed to `HTTPoison`.
   * `timeout`: How long to wait until considering the request timed out.
-    Passed to HTTPotion.
+    Passed to HTTPoison.
   * `open`: Boolean defining if the circuit is broken. Defaults to false.
   * `error_threshold`: The percent of requests allowed to fail, as a float.
     Defaults to 0.05 (5%)
@@ -90,20 +90,20 @@ defmodule Breaker do
       iex> Breaker.error?(%Breaker.OpenCircuitError{})
       true
 
-      iex> Breaker.error?(%HTTPotion.ErrorResponse{})
+      iex> Breaker.error?(%HTTPoison.Error{})
       true
 
-      iex> Breaker.error?(%HTTPotion.Response{status_code: 500})
+      iex> Breaker.error?(%HTTPoison.Response{status_code: 500})
       true
 
-      iex> Breaker.error?(%HTTPotion.Response{status_code: 200})
+      iex> Breaker.error?(%HTTPoison.Response{status_code: 200})
       false
 
   """
-  @spec error?(%Breaker.OpenCircuitError{} | %HTTPotion.ErrorResponse{} |
-  %HTTPotion.Response{}) :: boolean
+  @spec error?(%Breaker.OpenCircuitError{} | %HTTPoison.Error{} |
+  %HTTPoison.Response{}) :: boolean
   def error?(%Breaker.OpenCircuitError{}), do: true
-  def error?(%HTTPotion.ErrorResponse{}), do: true
+  def error?(%HTTPoison.Error{}), do: true
   def error?(%{status_code: status_code}) when status_code >= 400, do: true
   def error?(_), do: false
 
@@ -222,11 +222,11 @@ defmodule Breaker do
   ## Examples: ##
 
       iex> {:ok, circuit} = Breaker.start_link([url: "http://httpbin.org/"])
-      iex> Breaker.count(circuit, %HTTPotion.ErrorResponse{})
+      iex> Breaker.count(circuit, %HTTPoison.Error{})
       :ok
 
   """
-  @spec count(pid, %HTTPotion.Response{} | %HTTPotion.ErrorResponse{}) :: :ok
+  @spec count(pid, %HTTPoison.Response{} | %HTTPoison.Error{}) :: :ok
   def count(circuit, response), do: GenServer.cast(circuit, {:count, response})
 
   #####
@@ -241,7 +241,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   ## Examples: ##
 
@@ -266,7 +266,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec put(pid, String.t, []) :: Task.t
@@ -283,7 +283,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec head(pid, String.t, []) :: Task.t
@@ -300,7 +300,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec post(pid, String.t, []) :: Task.t
@@ -317,7 +317,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec patch(pid, String.t, []) :: Task.t
@@ -334,7 +334,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec delete(pid, String.t, []) :: Task.t
@@ -351,7 +351,7 @@ defmodule Breaker do
 
   * `circuit`: The breaker to perform the request.
   * `path`: The path string to append to the end of the breaker's `url`.
-  * `options`: Additional options passed to HTTPotion.
+  * `options`: Additional options passed to HTTPoison.
 
   """
   @spec options(pid, String.t, []) :: Task.t
@@ -370,8 +370,8 @@ defmodule Breaker do
 
   * `circuit`: The circuit to make the request with.
   * `path`: The request path, this is add to the circuit's `url`.
-  * `method`: An atom specifying the HTTP method, used by HTTPotion.
-  * `options`: Extra options to pass to HTTPotion. The circuit's `timeout` and
+  * `method`: An atom specifying the HTTP method, used by HTTPoison.
+  * `options`: Extra options to pass to HTTPoison. The circuit's `timeout` and
     `headers` are also added to this.
 
   ## Examples: ##
@@ -382,8 +382,8 @@ defmodule Breaker do
       200
 
   """
-  @spec make_request(pid, String.t, atom, []) :: %HTTPotion.Response{} |
-  %HTTPotion.ErrorResponse{} | %Breaker.OpenCircuitError{}
+  @spec make_request(pid, String.t, atom, []) :: %HTTPoison.Response{} |
+  %HTTPoison.Error{} | %Breaker.OpenCircuitError{}
   def make_request(circuit, path, method, options \\ []) do
     case GenServer.call(circuit, :options) do
       %Breaker.OpenCircuitError{} ->
@@ -392,11 +392,20 @@ defmodule Breaker do
         headers = options
         |> Keyword.get(:headers, [])
         |> Keyword.merge(headers, fn(_key, v1, _v2) -> v1 end)
-        options = options
-        |> Keyword.put_new(:timeout, timeout)
-        |> Keyword.put(:headers, headers)
+
         request_address = URI.merge(url, path)
-        response = HTTPotion.request(method, request_address, options)
+        timeout = Keyword.get(options, :timeout, timeout)
+
+        {_, response} =
+          %HTTPoison.Request{
+            method: method,
+            url: request_address,
+            body: Keyword.get(options, :body, []),
+            headers: headers,
+            options: [recv_timeout: timeout]
+          }
+          |> HTTPoison.request()
+
         Breaker.count(circuit, response)
         response
     end

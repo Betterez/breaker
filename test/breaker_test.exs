@@ -60,7 +60,7 @@ defmodule BreakerTest do
   test "request times out if new timeout is passed as option" do
     {:ok, circuit} = Breaker.start_link(@options)
     response = circuit |> Breaker.get("/delay/1", [timeout: 500]) |> Task.await
-    assert response.__struct__ == HTTPotion.ErrorResponse
+    assert response.__struct__ == HTTPoison.Error
   end
 
   test "merges specified headers" do
@@ -85,7 +85,7 @@ defmodule BreakerTest do
     test "the breaker can count a positive response in the current bucket" do
       {:ok, circuit} = Breaker.start_link(@options)
       [then | _] = get_window(circuit)
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 200})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 200})
       [now | _] = get_window(circuit)
       assert then.total == 0
       assert now.total == 1
@@ -94,7 +94,7 @@ defmodule BreakerTest do
     test "the breaker can count an error response in the current bucket" do
       {:ok, circuit} = Breaker.start_link(@options)
       [then | _] = get_window(circuit)
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 500})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 500})
       [now | _] = get_window(circuit)
       assert then.total == 0
       assert then.errors == 0
@@ -102,10 +102,10 @@ defmodule BreakerTest do
       assert now.errors == 1
     end
 
-    test "the breaker counts %HTTPotion.ErrorResponse{} as an error" do
+    test "the breaker counts %HTTPoison.Error{} as an error" do
       {:ok, circuit} = Breaker.start_link(@options)
       [then | _] = get_window(circuit)
-      Breaker.count(circuit, %HTTPotion.ErrorResponse{})
+      Breaker.count(circuit, %HTTPoison.Error{})
       [now | _] = get_window(circuit)
       assert then.errors == 0
       assert now.errors == 1
@@ -134,7 +134,7 @@ defmodule BreakerTest do
     test "counting a positive response updates the values in `sum`" do
       {:ok, circuit} = Breaker.start_link(@options)
       then = get_sum(circuit)
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 200})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 200})
       now = get_sum(circuit)
       assert then.total == 0
       assert now.total == 1
@@ -143,7 +143,7 @@ defmodule BreakerTest do
     test "counting an error response updates the values in `sum`" do
       {:ok, circuit} = Breaker.start_link(@options)
       then = get_sum(circuit)
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 500})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 500})
       now = get_sum(circuit)
       assert then.total == 0
       assert then.errors == 0
@@ -154,8 +154,8 @@ defmodule BreakerTest do
     test "rolling a bucket out of the window removes those values from `sum`" do
       options = @options ++ [window_length: 2]
       {:ok, circuit} = Breaker.start_link(options)
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 200})
-      Breaker.count(circuit, %HTTPotion.Response{status_code: 500})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 200})
+      Breaker.count(circuit, %HTTPoison.Response{status_code: 500})
       then = get_sum(circuit)
       Breaker.roll(circuit)
       Breaker.roll(circuit)

@@ -27,15 +27,15 @@ defmodule BreakerInternalsBench do
   end
 
   bench "count a hit", [pid: bench_context] do
-    Breaker.count(pid, %HTTPotion.Response{status_code: 200})
+    Breaker.count(pid, %HTTPoison.Response{status_code: 200})
   end
 
   bench "count a miss", [pid: bench_context] do
-    Breaker.count(pid, %HTTPotion.Response{status_code: 500})
+    Breaker.count(pid, %HTTPoison.Response{status_code: 500})
   end
 
   bench "count a timeout", [pid: bench_context] do
-    Breaker.count(pid, %HTTPotion.ErrorResponse{})
+    Breaker.count(pid, %HTTPoison.Error{})
   end
 
   bench "roll the health window", [pid: bench_context] do

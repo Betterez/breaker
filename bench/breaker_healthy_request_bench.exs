@@ -2,7 +2,7 @@ defmodule BreakerHealthyRequestBench do
   use Benchfella
 
   setup_all do
-    HTTPotion.start
+    HTTPoison.start()
     Breaker.start_link([url: "http://localhost:8080/"])
   end
 
@@ -12,7 +12,7 @@ defmodule BreakerHealthyRequestBench do
   end
 
   bench "get request without breaker" do
-    response = HTTPotion.get("http://localhost:8080/status/200")
+    {_, response} = HTTPoison.get("http://localhost:8080/status/200")
     Breaker.error?(response)
   end
 end

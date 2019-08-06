@@ -5,7 +5,7 @@ defmodule Breaker.Mixfile do
     [
       app: :breaker,
       version: "1.0.0",
-      elixir: "~> 1.3",
+      elixir: "~> 1.6",
       test_coverage: [tool: Coverex.Task, coveralls: true],
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -27,7 +27,6 @@ defmodule Breaker.Mixfile do
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
     [
-      applications: [:httpotion],
       extra_applications: [:logger]
     ]
   end
@@ -48,7 +47,7 @@ defmodule Breaker.Mixfile do
       {:credo, "~> 0.5", only: [:dev, :test]},
       {:earmark, "~> 1.1", only: [:dev, :docs]},
       {:ex_doc, "~> 0.14", only: [:dev, :docs]},
-      {:httpotion, "~> 3.1"},
+      {:httpoison, "~> 1.5"},
       {:inch_ex, only: :docs},
       {:poison, "~> 2.0", only: [:dev, :test, :docs]}
     ]

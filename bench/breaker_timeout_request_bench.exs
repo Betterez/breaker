@@ -2,7 +2,7 @@ defmodule BreakerTimeoutRequestBench do
   use Benchfella
 
   setup_all do
-    HTTPotion.start
+    HTTPoison.start()
     Breaker.start_link([url: "http://localhost:8080/", timeout: 500])
   end
 
@@ -12,7 +12,7 @@ defmodule BreakerTimeoutRequestBench do
   end
 
   bench "get request without breaker" do
-    response = HTTPotion.get("http://localhost:8080/delay/1", timeout: 500)
+    {_, response} = HTTPoison.get("http://localhost:8080/delay/1", timeout: 500)
     Breaker.error?(response)
   end
 end

@@ -7,7 +7,7 @@
 [![Ebert](https://ebertapp.io/github/awochna/breaker.svg)](https://ebertapp.io/github/awochna/breaker)
 
 A Circuit Breaker in Elixir for making async HTTP(S) requests to external resources.
-Uses [HTTPotion](https://github.com/myfreeweb/httpotion) to make requests.
+Uses [HTTPoison](https://github.com/edgurgel/httpoison) to make requests.
 
 The following README documentation is for the `master` branch.
 Maybe you're looking for the [1.0.0 docs](http://hexdocs.pm/breaker/1.0.0/)?
@@ -77,7 +77,7 @@ end
 
 Breaker has a function for each of the HTTP methods: `GET`, `POST`, `PUT`, `PATCH`, `HEAD`, `DELETE`, and `OPTIONS`.
 
-They follow the same easy convention as HTTPotion: `Breaker.get/3`, `Breaker.put/3`, etc.
+They follow the same easy convention as HTTPoison: `Breaker.get/3`, `Breaker.put/3`, etc.
 
 ### Naming your Breaker ###
 
@@ -106,10 +106,10 @@ You can configure your new breaker with a few different options.
 The following options affect each request made:
 
 * `url`: Required, the base URL for your external serivce, like "http://your-domain.com/users/" for your user service, or "http://users.your-domain.com/"
-* `headers`: Any headers (like in HTTPotion) that should be included in EVERY request made by the circuit breaker.
+* `headers`: Any headers (like in HTTPoison) that should be included in EVERY request made by the circuit breaker.
 This could be something like an authentication token or a service identifier for logs.
 The default is `[]`.
-* `timeout`: The number of milliseconds before giving up on a request. This is passed to HTTPotion and has a default of `3000`, or 3 seconds.
+* `timeout`: The number of milliseconds before giving up on a request. This is passed to HTTPoison and has a default of `3000`, or 3 seconds.
 
 The following options affect how the breaker's status is calculated:
 
