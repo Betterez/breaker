@@ -27,3 +27,6 @@ erl_crash.dump
 # Also ignore benchmark output
 /bench/graphs
 /bench/snapshots
+
+# vscode dializer
+.elixir_ls

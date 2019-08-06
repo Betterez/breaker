@@ -48,7 +48,7 @@ defmodule Breaker.Mixfile do
       {:credo, "~> 0.5", only: [:dev, :test]},
       {:earmark, "~> 1.1", only: [:dev, :docs]},
       {:ex_doc, "~> 0.14", only: [:dev, :docs]},
-      {:httpotion, "~> 3.0.2"},
+      {:httpotion, "~> 3.1"},
       {:inch_ex, only: :docs},
       {:poison, "~> 2.0", only: [:dev, :test, :docs]}
     ]

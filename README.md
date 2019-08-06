@@ -68,7 +68,6 @@ response = Task.await(request)
 cond do
   Breaker.error?(response) ->
     # put this request in Redis for later
-  # other possible responses, like 403 or 422
   response.status_code == 200 ->
     # yay, continue
 end
@@ -95,7 +94,7 @@ This makes it easier to use application-wide breakers and supervision trees.
 ### Other Helpful Functions ###
 
 * `Breaker.open?/1` takes a breaker and returns a boolean, asking if it is open (won't allow network flow)
-* `Breaker.error?/1` takes a response and returns a boolean, asking if the response was some sort of error (Status Code of 500, timeout, `Breaker.OpenCircuitError`)
+* `Breaker.error?/1` takes a response and returns a boolean, asking if the response was some sort of error (Status Code >= 400, timeout, `Breaker.OpenCircuitError`)
 * `Breaker.trip/1` sets the breaker's status to open, disallowing network flow.
 * `Breaker.reset/1` sets the breaker's status to closed, allowing network flow.
 

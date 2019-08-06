@@ -36,10 +36,17 @@ defmodule BreakerTest do
     |> Enum.each(fn(response) -> assert response.status_code == 200 end)
   end
 
-  test "single failure with error_threshold level of 0 trips circuit" do
+  test "single 500 with error_threshold level of 0 trips circuit" do
     options = @options ++ [error_threshold: 0]
     {:ok, circuit} = Breaker.start_link(options)
     circuit |> Breaker.get("/status/500") |> Task.await
+    assert Breaker.open?(circuit)
+  end
+
+  test "single 429 with error_threshold level of 0 trips circuit" do
+    options = @options ++ [error_threshold: 0]
+    {:ok, circuit} = Breaker.start_link(options)
+    circuit |> Breaker.get("/status/429") |> Task.await
     assert Breaker.open?(circuit)
   end
 

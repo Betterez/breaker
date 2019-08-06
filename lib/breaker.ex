@@ -79,7 +79,7 @@ defmodule Breaker do
 
   @doc """
   Checks if the given response is either a `%Breaker.OpenCircuitError{}`, a
-  timeout, or has a 500 status code.
+  timeout, or has a status code >= 400.
 
   ## Parameters: ##
 
@@ -102,11 +102,10 @@ defmodule Breaker do
   """
   @spec error?(%Breaker.OpenCircuitError{} | %HTTPotion.ErrorResponse{} |
   %HTTPotion.Response{}) :: boolean
-  def error?(response) do
-    response.__struct__ == Breaker.OpenCircuitError ||
-    response.__struct__ == HTTPotion.ErrorResponse ||
-    response.status_code == 500
-  end
+  def error?(%Breaker.OpenCircuitError{}), do: true
+  def error?(%HTTPotion.ErrorResponse{}), do: true
+  def error?(%{status_code: status_code}) when status_code >= 400, do: true
+  def error?(_), do: false
 
   @doc """
   Trip the circuit.

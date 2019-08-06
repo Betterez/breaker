@@ -1,4 +1,5 @@
-%{"benchfella": {:hex, :benchfella, "0.3.4", "41d2c017b361ece5225b5ba2e3b30ae53578c57c6ebc434417b4f1c2c94cf4f3", [:mix], []},
+%{
+  "benchfella": {:hex, :benchfella, "0.3.4", "41d2c017b361ece5225b5ba2e3b30ae53578c57c6ebc434417b4f1c2c94cf4f3", [:mix], []},
   "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], []},
   "certifi": {:hex, :certifi, "0.7.0", "861a57f3808f7eb0c2d1802afeaae0fa5de813b0df0979153cbafcd853ababaf", [:rebar3], []},
   "con_cache": {:hex, :con_cache, "0.11.1", "acbe5a1d10c47faba30d9629c9121e1ef9bca0aa5eddbb86f4e777bd9f9f9b6f", [:mix], [{:exactor, "~> 2.2.0", [hex: :exactor, optional: false]}]},
@@ -12,7 +13,7 @@
   "exjsx": {:hex, :exjsx, "3.2.1", "1bc5bf1e4fd249104178f0885030bcd75a4526f4d2a1e976f4b428d347614f0f", [:mix], [{:jsx, "~> 2.8.0", [hex: :jsx, optional: false]}]},
   "hackney": {:hex, :hackney, "1.6.5", "8c025ee397ac94a184b0743c73b33b96465e85f90a02e210e86df6cbafaa5065", [:rebar3], [{:certifi, "0.7.0", [hex: :certifi, optional: false]}, {:idna, "1.2.0", [hex: :idna, optional: false]}, {:metrics, "1.0.1", [hex: :metrics, optional: false]}, {:mimerl, "1.0.2", [hex: :mimerl, optional: false]}, {:ssl_verify_fun, "1.1.1", [hex: :ssl_verify_fun, optional: false]}]},
   "httparrot": {:hex, :httparrot, "0.5.0", "17ef9ae11ec36e8a329fba30eb7b27b84848c9997d25f1bc94f27e1784370b3f", [:mix], [{:con_cache, "~> 0.11.1", [hex: :con_cache, optional: false]}, {:cowboy, "~> 1.0.0", [hex: :cowboy, optional: false]}, {:exjsx, "~> 3.0", [hex: :exjsx, optional: false]}]},
-  "httpotion": {:hex, :httpotion, "3.0.2", "525b9bfeb592c914a61a8ee31fdde3871e1861dfe805f8ee5f711f9f11a93483", [:mix], [{:ibrowse, "~> 4.2", [hex: :ibrowse, optional: false]}]},
+  "httpotion": {:hex, :httpotion, "3.1.2", "50e3e559c2ffe8c8908c97e4ffb01efc1c18e8547cc7ce5dd173c9cf0a573a3b", [:mix], [{:ibrowse, "== 4.4.0", [hex: :ibrowse, repo: "hexpm", optional: false]}], "hexpm"},
   "ibrowse": {:hex, :ibrowse, "4.4.0", "2d923325efe0d2cb09b9c6a047b2835a5eda69d8a47ed6ff8bc03628b764e991", [:rebar3], []},
   "idna": {:hex, :idna, "1.2.0", "ac62ee99da068f43c50dc69acf700e03a62a348360126260e87f2b54eced86b2", [:rebar3], []},
   "inch_ex": {:hex, :inch_ex, "0.5.6", "418357418a553baa6d04eccd1b44171936817db61f4c0840112b420b8e378e67", [:mix], [{:poison, "~> 1.5 or ~> 2.0 or ~> 3.0", [hex: :poison, optional: false]}]},
@@ -21,4 +22,5 @@
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], []},
   "poison": {:hex, :poison, "2.2.0", "4763b69a8a77bd77d26f477d196428b741261a761257ff1cf92753a0d4d24a63", [:mix], []},
   "ranch": {:hex, :ranch, "1.2.1", "a6fb992c10f2187b46ffd17ce398ddf8a54f691b81768f9ef5f461ea7e28c762", [:make], []},
-  "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []}}
+  "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], []},
+}
