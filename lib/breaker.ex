@@ -72,7 +72,7 @@ defmodule Breaker do
       true
 
   """
-  @spec start_link([url: String.t], atom | tuple) :: {:ok, pid}
+  @spec start_link([url: String.t], atom | tuple) :: GenServer.on_start()
   def start_link(options, name \\ nil) do
     GenServer.start_link(__MODULE__, options, name: name)
   end
